@@ -38,8 +38,8 @@ const validToken = (req) => {
     if (!req.headers.authorization) {
         return false;
     }
-    let token = req.headers.authorization;
-    console.log(token);
+    let token = req.headers.authorization.split(" ")[1];
+    // console.log(token);
     if (token === "null") return false;
     let payload;
     try {
