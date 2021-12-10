@@ -61,6 +61,10 @@ const validToken = (req) => {
 }
 
 const authenticated = (password) => {
-  const hash = crypto.createHash('sha256').update(password).digest('hex')
-  return hash === process.env.password
+  var hashedPass = crypto
+  .createHash("sha256")
+  .update(password)
+  .digest("hex");
+  // Password given here is already hashed from frontend
+  return hashedPass === process.env.password
 }
