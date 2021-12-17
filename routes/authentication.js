@@ -34,12 +34,10 @@ const authenticated = async (username, password) => {
 };
 
 const validToken = (req) => {
-    console.log(req.headers);
     if (!req.headers.authorization) {
         return false;
     }
     let token = req.headers.authorization.split(" ")[1];
-    // console.log(token);
     if (token === "null") return false;
     let payload;
     try {
