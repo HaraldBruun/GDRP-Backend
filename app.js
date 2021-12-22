@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const usersRoute = require("./routes/users");
+const dataRoute = require("./routes/data");
 const {authenticationRoute, validToken} = require("./routes/authentication")
 require("dotenv").config();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 // middleware
 app.use("/user", usersRoute);
+app.use("/data", dataRoute);
 app.use("/login", authenticationRoute);
 
 mongoose.connect(
