@@ -4,20 +4,16 @@ const authenticationRoute = express.Router();
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-authenticationRoute.post("/", (req, res) => {
-    if (validToken(req)) {
-        res.status(200).send("Already logged in");
-    } else {
-        if (authenticated(req.body.username, req.body.password)) {
+authenticationRoute.post("/", async (req, res) => {
+        if (await authenticated(req.body.username, req.body.password)) {
             let payload = { subject: req.body.username };
             let token = jwt.sign(payload, process.env.secret, {
-                expiresIn: "1d",
+                expiresIn: 60,
             });
             res.status(200).send({ token });
         } else {
             res.status(401).send("Unauthorized");
         }
-    }
 });
 
 const authenticated = async (username, password) => {
