@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Hello world")
+  res.send({message: "Hello world"})
 })
 
 app.listen(process.env.PORT || 3000, function () {

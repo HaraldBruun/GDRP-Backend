@@ -5,15 +5,15 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 authenticationRoute.post("/", async (req, res) => {
-        if (await authenticated(req.body.username, req.body.password)) {
-            let payload = { subject: req.body.username };
-            let token = jwt.sign(payload, process.env.secret, {
-                expiresIn: 60,
-            });
-            res.status(200).send({ token });
-        } else {
-            res.status(401).send("Unauthorized");
-        }
+    if (await authenticated(req.body.username, req.body.password)) {
+        let payload = { subject: req.body.username };
+        let token = jwt.sign(payload, process.env.secret, {
+            expiresIn: "1h",
+        });
+        res.status(200).send({ token });
+    } else {
+        res.status(401).send({ message: "Unauthorized" });
+    }
 });
 
 const authenticated = async (username, password) => {
