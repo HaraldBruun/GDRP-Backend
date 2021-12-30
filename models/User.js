@@ -9,6 +9,13 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    accountAddress: {
+        type: String
+    },
+    citizenContract: {
+        type: String
+    }
+
 });
 
 module.exports = mongoose.model("Users", UserSchema);

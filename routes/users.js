@@ -15,7 +15,12 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
     const user = new User({
         username: req.body.username,
-        password: crypto.createHash("sha256").update(req.body.password).digest("hex"),
+        password: crypto
+            .createHash("sha256")
+            .update(req.body.password)
+            .digest("hex"),
+        accountAddress: req.body.accountAddress,
+        citizenContract: req.body.citizenContract,
     });
 
     try {
@@ -26,10 +31,23 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/id/:id", async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         res.json(user);
+    } catch (err) {
+        res.send(err);
+    }
+});
+
+router.get("/username/:id", async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.id });
+        if (user) {
+            res.json(user);
+        } else {
+            res.send({ message: "User not found" });
+        }
     } catch (err) {
         res.send(err);
     }

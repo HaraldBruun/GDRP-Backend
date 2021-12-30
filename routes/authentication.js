@@ -11,7 +11,8 @@ authenticationRoute.post("/", async (req, res) => {
         let token = jwt.sign(payload, process.env.secret, {
             expiresIn: "1h",
         });
-        res.status(200).send({ token, id: auth.id });
+        res.status(200).send({ token, id: auth.id, 
+            accountAddress: auth.accountAddress, citizenContract: auth.citizenContract  });
     } else {
         res.status(401).send({ message: "Unauthorized" });
     }
@@ -24,7 +25,8 @@ const authenticated = async (username, password) => {
             .createHash("sha256")
             .update(password)
             .digest("hex");
-        return { access: user.password === hashedPass, id: user._id };
+        return { access: user.password === hashedPass, id: user._id, 
+                 accountAddress: user.accountAddress, citizenContract: user.citizenContract };
     } else {
         return { access: false };
     }
