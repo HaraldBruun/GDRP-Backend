@@ -5,12 +5,13 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 authenticationRoute.post("/", async (req, res) => {
-    if (await authenticated(req.body.username, req.body.password)) {
+    let auth = await authenticated(req.body.username, req.body.password);
+    if (auth.access) {
         let payload = { subject: req.body.username };
         let token = jwt.sign(payload, process.env.secret, {
             expiresIn: "1h",
         });
-        res.status(200).send({ token });
+        res.status(200).send({ token, id: auth.id });
     } else {
         res.status(401).send({ message: "Unauthorized" });
     }
@@ -23,9 +24,9 @@ const authenticated = async (username, password) => {
             .createHash("sha256")
             .update(password)
             .digest("hex");
-        return user.password === hashedPass;
+        return { access: user.password === hashedPass, id: user._id };
     } else {
-        return false;
+        return { access: false };
     }
 };
 
