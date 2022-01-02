@@ -20,6 +20,18 @@ router.get("/dataid/:id", async (req, res) => {
     }
 });
 
+router.put("/dataid/", async (req, res) => {
+    try {
+        const data = await Data.findOneAndReplace({_id: req.body.id}, {
+            userId: req.body.userId,
+            content: req.body.content,
+        });
+        res.json(data);
+    } catch (error) {
+        res.send(error);
+    }
+});
+
 router.get("/userid/:id", async (req, res) => {
     try {
         const data = await Data.find({ userId: req.params.id });
