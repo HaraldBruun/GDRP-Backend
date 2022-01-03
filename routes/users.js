@@ -40,7 +40,7 @@ router.get("/id/:id", async (req, res) => {
     }
 });
 
-router.get("/username/:id", async (req, res) => {
+router.get("/userid/:id", async (req, res) => {
     try {
         const user = await User.findOne({ username: req.params.id });
         if (user) {
