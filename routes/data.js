@@ -20,13 +20,12 @@ router.get("/dataid/:id", async (req, res) => {
     }
 });
 
-router.put("/dataid/", async (req, res) => {
+router.put("/dataid/:id", async (req, res) => {
     try {
-        const data = await Data.findOneAndReplace({_id: req.body.id}, {
-            userId: req.body.userId,
+        await Data.updateOne({_id: req.params.id}, {
             content: req.body.content,
         });
-        res.json(data);
+        res.json({message: "Data updated" });
     } catch (error) {
         res.send(error);
     }
