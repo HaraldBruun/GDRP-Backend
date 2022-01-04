@@ -5,6 +5,7 @@ const cors = require("cors");
 const usersRoute = require("./routes/users");
 const dataRoute = require("./routes/data");
 const permissionRoute = require("./routes/permission");
+const requestRoute = require("./routes/request")
 const {authenticationRoute, validToken} = require("./routes/authentication")
 const crypto = require("crypto")
 const User = require("./models/User")
@@ -57,6 +58,7 @@ app.use((req, res, next) => {
 app.use("/user", usersRoute);
 app.use("/data", dataRoute);
 app.use("/permission", permissionRoute);
+app.use("/request", requestRoute);
 
 app.get("/", (req, res) => {
   res.send({message: "Hello world"})

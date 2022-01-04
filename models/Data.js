@@ -8,6 +8,10 @@ const DataSchema = new mongoose.Schema({
     content: {
         type: String,
         required: true
+    },
+    dataType: {
+        type: String,
+        required: true
     }
 });
 

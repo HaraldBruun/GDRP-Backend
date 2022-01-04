@@ -12,28 +12,60 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    console.log(req);
     const permission = new Permission({
         requesterAddress: req.body.requesterAddress,
         contractAddress: req.body.contractAddress,
-        validUntil: req.body.validUntil,
-        dataId: req.body.dataId
+        retention: req.body.retention,
+        dataId: req.body.dataId,
+        status: "pending",
     });
 
     try {
         const newPermission = await permission.save();
         res.json(newPermission);
     } catch (err) {
-        res.send(err);
+        res.status(500).send(err);
     }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/id/:id", async (req, res) => {
     try {
         const data = await Permission.findById(req.params.id);
         res.json(data);
     } catch (error) {
-        res.send(error);
+        res.status(500).send(error);
     }
 });
+
+router.get("/accepted/:address", async (req, res) => {
+    try {
+        const data = await Permission.find({requesterAddress: req.params.address, status: "accepted"});
+        res.json(data);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+router.get("/denied/:address", async (req, res) => {
+    try {
+        const data = await Permission.find({requesterAddress: req.params.address});
+        res.json(data);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+router.put("/:id", async (req, res) => {
+    try {
+        await Permission.updateOne(
+            { _id: req.params.id },
+            { status: req.body.status }
+        );
+
+        res.json({ message: "Data updated" });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
 module.exports = router;

@@ -22,10 +22,13 @@ router.get("/id/:id", async (req, res) => {
 
 router.put("/id/:id", async (req, res) => {
     try {
-        await Data.updateOne({_id: req.params.id}, {
-            content: req.body.content,
-        });
-        res.json({message: "Data updated" });
+        await Data.updateOne(
+            { _id: req.params.id },
+            {
+                content: req.body.content,
+            }
+        );
+        res.json({ message: "Data updated" });
     } catch (error) {
         res.send(error);
     }
@@ -56,6 +59,7 @@ router.post("/", async (req, res) => {
     const data = new Data({
         userId: req.body.userId,
         content: req.body.content,
+        dataType: req.body.dataType,
     });
 
     try {
