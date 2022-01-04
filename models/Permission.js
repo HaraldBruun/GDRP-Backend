@@ -9,11 +9,15 @@ const PermissionSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    validUntil: {
+    retention: {
         type: Date,
         required: false
     },
     dataId: {
+        type: String,
+        required: true
+    },
+    status: {
         type: String,
         required: true
     }
