@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const usersRoute = require("./routes/users");
 const dataRoute = require("./routes/data");
+const permissionRoute = require("./routes/permission");
 const {authenticationRoute, validToken} = require("./routes/authentication")
 const crypto = require("crypto")
 const User = require("./models/User")
@@ -43,6 +44,7 @@ app.post("/user", async (req, res) => {
     }
 });
 
+// Token authenticator for all routes below
 app.use((req, res, next) => {
     if (validToken(req, res)) {
         next();
@@ -54,6 +56,7 @@ app.use((req, res, next) => {
 // middleware
 app.use("/user", usersRoute);
 app.use("/data", dataRoute);
+app.use("/permission", permissionRoute);
 
 app.get("/", (req, res) => {
   res.send({message: "Hello world"})
