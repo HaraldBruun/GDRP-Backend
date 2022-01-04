@@ -3,6 +3,7 @@ const User = require("../models/User");
 const router = express.Router();
 const crypto = require("crypto");
 
+// Get all users
 router.get("/", async (req, res) => {
     try {
         const users = await User.find();
@@ -12,25 +13,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.post("/", async (req, res) => {
-    const user = new User({
-        username: req.body.username,
-        password: crypto
-            .createHash("sha256")
-            .update(req.body.password)
-            .digest("hex"),
-        accountAddress: req.body.accountAddress,
-        citizenContract: req.body.citizenContract,
-    });
-
-    try {
-        const newUser = await user.save();
-        res.json(newUser);
-    } catch (err) {
-        res.send(err);
-    }
-});
-
+// Get single user from _id
 router.get("/id/:id", async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
@@ -40,19 +23,7 @@ router.get("/id/:id", async (req, res) => {
     }
 });
 
-router.get("/userid/:id", async (req, res) => {
-    try {
-        const user = await User.findOne({ username: req.params.id });
-        if (user) {
-            res.json(user);
-        } else {
-            res.send({ message: "User not found" });
-        }
-    } catch (err) {
-        res.send(err);
-    }
-});
-
+// Update user info
 router.put("/:id", async (req, res) => {
     try {
         const updatedUser = await User.updateOne(
@@ -60,7 +31,12 @@ router.put("/:id", async (req, res) => {
             {
                 $set: {
                     username: req.body.username,
-                    password: req.body.password,
+                    password: crypto
+                        .createHash("sha256")
+                        .update(req.body.password)
+                        .digest("hex"),
+                    accountAddress: req.body.accountAddress,
+                    citizenContract: req.body.citizenContract,
                 },
             }
         );
@@ -70,6 +46,7 @@ router.put("/:id", async (req, res) => {
     }
 });
 
+// Delete user with _id
 router.delete("/:id", async (req, res) => {
     try {
         const deletedUser = await User.remove({ _id: req.params.id });

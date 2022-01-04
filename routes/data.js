@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/dataid/:id", async (req, res) => {
+router.get("/id/:id", async (req, res) => {
     try {
         const data = await Data.findById(req.params.id);
         res.json(data);
@@ -20,7 +20,7 @@ router.get("/dataid/:id", async (req, res) => {
     }
 });
 
-router.put("/dataid/:id", async (req, res) => {
+router.put("/id/:id", async (req, res) => {
     try {
         await Data.updateOne({_id: req.params.id}, {
             content: req.body.content,
@@ -40,7 +40,7 @@ router.get("/userid/:id", async (req, res) => {
     }
 });
 
-router.delete("/dataid/:id", async (req, res) => {
+router.delete("/id/:id", async (req, res) => {
     try {
         const data = await Data.findByIdAndDelete(req.params.id);
         // returnér 200 eller data også?

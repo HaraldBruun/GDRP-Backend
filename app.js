@@ -5,17 +5,14 @@ const cors = require("cors");
 const usersRoute = require("./routes/users");
 const dataRoute = require("./routes/data");
 const {authenticationRoute, validToken} = require("./routes/authentication")
+const crypto = require("crypto")
+const User = require("./models/User")
 require("dotenv").config();
 
 app.use(cors());
 app.options("*", cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-// middleware
-app.use("/user", usersRoute);
-app.use("/data", dataRoute);
-app.use("/login", authenticationRoute);
 
 mongoose.connect(
     process.env.DB_CONNECTION,
@@ -25,6 +22,27 @@ mongoose.connect(
     }
 );
 
+app.use("/login", authenticationRoute);
+
+// Create new user
+app.post("/user", async (req, res) => {
+    const user = new User({
+        username: req.body.username,
+        password: crypto
+            .createHash("sha256")
+            .update(req.body.password)
+            .digest("hex"),
+        accountAddress: req.body.accountAddress,
+        citizenContract: req.body.citizenContract,
+    });
+    try {
+        const newUser = await user.save();
+        res.json(newUser);
+    } catch (err) {
+        res.send(err);
+    }
+});
+
 app.use((req, res, next) => {
     if (validToken(req, res)) {
         next();
@@ -32,6 +50,10 @@ app.use((req, res, next) => {
         res.sendStatus(401);
     }
 });
+
+// middleware
+app.use("/user", usersRoute);
+app.use("/data", dataRoute);
 
 app.get("/", (req, res) => {
   res.send({message: "Hello world"})

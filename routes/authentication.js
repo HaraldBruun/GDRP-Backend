@@ -4,6 +4,7 @@ const authenticationRoute = express.Router();
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
+// Login
 authenticationRoute.post("/", async (req, res) => {
     let auth = await authenticated(req.body.username, req.body.password);
     if (auth.access) {
@@ -17,6 +18,20 @@ authenticationRoute.post("/", async (req, res) => {
         res.status(401).send({ message: "Unauthorized" });
     }
 });
+
+// Check if username is already taken
+authenticationRoute.get("/checkusername/:username", async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username });
+        if (user) {
+            res.json(user);
+        } else {
+            res.send({ message: "User not found" });
+        }
+    } catch (err) {
+        res.send(err);
+    }
+})
 
 const authenticated = async (username, password) => {
     let user = await User.findOne({ username: username });
