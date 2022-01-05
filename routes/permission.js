@@ -37,7 +37,7 @@ router.get("/id/:id", async (req, res) => {
     }
 });
 
-router.get("/accepted/:address", async (req, res) => {
+router.get("/received/:address", async (req, res) => {
     try {
         const data = await Permission.find({requesterAddress: req.params.address, status: "accepted"});
         res.json(data);
@@ -48,7 +48,7 @@ router.get("/accepted/:address", async (req, res) => {
 
 router.get("/denied/:address", async (req, res) => {
     try {
-        const data = await Permission.find({requesterAddress: req.params.address});
+        const data = await Permission.find({requesterAddress: req.params.address, status: "denied"});
         res.json(data);
     } catch (error) {
         res.status(500).send(error);
