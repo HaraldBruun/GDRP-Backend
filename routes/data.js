@@ -26,6 +26,7 @@ router.put("/id/:id", async (req, res) => {
             { _id: req.params.id },
             {
                 content: req.body.content,
+                dataType: req.body.dataType
             }
         );
         res.json({ message: "Data updated" });
