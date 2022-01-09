@@ -1,4 +1,5 @@
 const express = require("express");
+const { Query } = require("mongoose");
 const Data = require("../models/Data");
 const router = express.Router();
 
@@ -17,6 +18,25 @@ router.get("/id/:id", async (req, res) => {
         res.json(data);
     } catch (error) {
         res.send(error);
+    }
+});
+
+router.get("/datatype/id/:id", async (req, res) => {
+    let ids = req.params.id.split("&");
+    if (ids.length === 1) {
+        try {
+            const data = await Data.findById(req.params.id).select('-content');
+            res.json([data]); // send as array
+        } catch (error) {
+            res.send(error);
+        }
+    } else {
+        try {
+            const found = await Data.find().where('_id').in(ids).select('-content').exec();
+            res.json(found);
+        } catch (err) {
+            res.send(err);
+        }
     }
 });
 
