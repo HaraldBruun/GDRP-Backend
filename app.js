@@ -9,6 +9,7 @@ const requestRoute = require("./routes/request")
 const {authenticationRoute, validToken} = require("./routes/authentication")
 const crypto = require("crypto")
 const User = require("./models/User")
+const { generateKeyPairs } = require("./utils")
 require("dotenv").config();
 
 app.use(cors());
@@ -39,7 +40,8 @@ app.post("/user", async (req, res) => {
     });
     try {
         const newUser = await user.save();
-        res.json(newUser);
+        const privateKey = await generateKeyPairs(newUser._id, newUser.accountAddress)        
+        res.send({privateKey: privateKey});
     } catch (err) {
         res.send(err);
     }
