@@ -39,7 +39,10 @@ router.get("/id/:id", async (req, res) => {
 
 router.get("/received/:address", async (req, res) => {
     try {
-        const data = await Permission.find({requesterAddress: req.params.address, status: "accepted"});
+        const data = await Permission.find({
+            requesterAddress: req.params.address,
+            status: "accepted",
+        });
         res.json(data);
     } catch (error) {
         res.status(500).send(error);
@@ -48,7 +51,10 @@ router.get("/received/:address", async (req, res) => {
 
 router.get("/denied/:address", async (req, res) => {
     try {
-        const data = await Permission.find({requesterAddress: req.params.address, status: "denied"});
+        const data = await Permission.find({
+            requesterAddress: req.params.address,
+            status: "denied",
+        });
         res.json(data);
     } catch (error) {
         res.status(500).send(error);
@@ -59,7 +65,10 @@ router.put("/:id", async (req, res) => {
     try {
         await Permission.updateOne(
             { _id: req.params.id },
-            { status: req.body.status }
+            {
+                status: req.body.status,
+                retention: req.body.retention,
+            }
         );
 
         res.json({ message: "Data updated" });
@@ -71,7 +80,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
     try {
         await Permission.findByIdAndDelete(req.params.id);
-        res.status(200).json({message: "Permission deleted"});
+        res.status(200).json({ message: "Permission deleted" });
     } catch (error) {
         res.status(500).json(error);
     }
