@@ -66,6 +66,25 @@ router.get("/accaddress/:id", async (req, res) => {
     }
 });
 
+router.get("/contractaddress/:id", async (req, res) => {
+    let ids = req.params.id.split("&");
+    if (ids.length === 1) {
+        try {
+            const user = await User.find({contractAddress: req.params.id});
+            res.json(user);
+        } catch (err) {
+            res.send(err);
+        }
+    } else {
+        try {
+            const users = await User.find().where('contractAddress').in(ids).exec();
+            res.json(users)
+        } catch (err) {
+            res.send(err);
+        }
+    }
+});
+
 // Update user info
 router.put("/:id", async (req, res) => {
     try {
